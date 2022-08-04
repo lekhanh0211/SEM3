@@ -1,0 +1,96 @@
+Create database WCF_QLKH
+go
+use WCF_QLKH
+go
+Create table NhanVien
+(
+	id int primary key identity,
+	name nvarchar(200),
+	username varchar(50),
+	password varchar(50),
+	birthday date,
+	phone varchar(20),
+	address nvarchar(200),
+)
+GO
+
+Create table DanhMuc
+(
+	id int primary key identity,
+	name nvarchar(200),
+	status bit
+
+)
+GO
+
+Create table SanPham
+(
+	id int primary key identity,
+	name nvarchar(200),
+	catId int foreign key references DanhMuc(id),
+	price float,
+	quantity int,
+	description nvarchar(200),
+	status bit
+)
+GO
+
+Create table HoaDon
+(
+	id varchar(10) primary key not null,
+	empId int foreign key references NhanVien(id),
+	created_at datetime,
+	customer nvarchar(200),
+	totalPrice float
+)
+GO
+
+Create table ChiTiet
+(
+	orderId varchar(10) foreign key references HoaDon(id),
+	proId int foreign key references SanPham(id),
+	quantity int,
+	price float,
+	totalPrice float,
+	primary key(orderId,proId)
+)
+GO
+
+Insert into DanhMuc values
+(N'Sắt',1),(N'Xi măng',1),(N'Cát',0),(N'Đá',1),(N'Gạch',0);
+Go
+
+Insert into NhanVien values
+(N'Lê Duy Khánh','khanhld','1234','1997-11-02','033976275',N'Hà Nội'),
+(N'Admin','admin','admin','1998-10-19','0777399333',N'Hà Nam'),
+(N'Đỗ Thị Mỹ Linh','linh','1234','1996-07-25','0369290091',N'Hà Tây');
+Go
+
+Insert into SanPham values
+(N'Sắt phi 10',1,160000,5,N'Dùng để mài kim',1),
+(N'Xi măng P40',2,260000,15,N'Dùng để xây',0),
+(N'Xi măng P45',2,700000,8,N'Dùng để đổ trần',0),
+(N'Đá 1 2',4,2500000,2,N'Dùng để ném nhau',1),
+(N'Cát đen',1,90000,10,N'Dùng để lọc nước',1);
+Go
+
+Insert into HoaDon values
+('HD001',1,'2022-06-20',N'Mai Xuân Trường',3500000),
+('HD002',1,'2022-06-15',N'Đỗ Đức Dương',150000),
+('HD003',2,'2022-06-10',N'Cao Minh Huy',670000);
+Go
+
+Insert into ChiTiet values
+('HD001',3,10,130000,1300000),
+('HD001',2,15,180000,1400000);
+
+Go
+
+use master
+drop database WCF_QLKH
+
+select * From NhanVien
+select * From DanhMuc
+select * From SanPham
+select * From HoaDon
+select * From ChiTiet
